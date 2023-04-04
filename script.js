@@ -30,32 +30,57 @@ let productos = products.map(product => {
 })
 let carrito = []
 
-let listaProductos = "Ingrese el numero de la opcion que desea ver: \n0: para salir\n1: para mostrar todos los modelos \n2: escogerlos por categoria \n3: escogerlos por precio \n4: para ver la cantidad de stock."
- + productos.map(producto => producto.id + " " + producto.nombre).join('\n')
+let listaProductos = "Ingrese el numero de la opcion que desea ver: \n0: para salir\n1: para mostrar todos los modelos \n2: escogerlos por categoria \n3: escogerlos por precio \n4: para ver la cantidad en stock \n5:agregar productos al carrito" 
+ + (productos.map(producto => producto.id + " " + producto.modelo + " " + producto.categoria + " " + producto.precio)).join('\n')
  
 let opcion
-do {
+do{
   opcion = Number(prompt(listaProductos))
-  let productoBuscado = productos.find(producto => producto.id === opcion)
-  if (productoBuscado) {
-    let posicionProductoBuscado = carrito.findIndex(producto => producto.id === productoBuscado.id)
-    if (posicionProductoBuscado != -1) {
-      carrito[posicionProductoBuscado].cantidadUnidades++
-      carrito[posicionProductoBuscado].subtotal = carrito[posicionProductoBuscado].precioUnidad * carrito[posicionProductoBuscado].cantidadUnidades
-    } else {
-      carrito.push({
-        id: productoBuscado.id,
-        nombre: productoBuscado.nombre,
-        cantidadUnidades: 1,
-        precioUnidad: productoBuscado.precio,
-        subtotal: productoBuscado.precio
-      })
+  if(opcion === 1){
+    let todosProductos= productos.map(producto =>"ID: " + producto.id + " MODELO: " + producto.modelo + " CATEGORIA: " + producto.categoria + " PRECIO: " + producto.precio).join("\n")
+    alert(todosProductos)
+  }else if(opcion === 2){
+    let categoria = prompt("Ingrese la categoria que desea ver: ")
+    let productosPorCategoria = productos.filter(producto => producto.categoria === categoria)
+    let productosCategoriaString = productosPorCategoria.map(producto => "ID: " + producto.id + " MODELO: " + producto.modelo + " PRECIO: " + producto.precio + " STOCK: " + producto.stock).join("\n")
+  alert(productosCategoriaString);
+  }else if (opcion === 3){
+  let precio= prompt("precios de menor a mayor")
+  let productosPorPrecio= productos.filter(producto => producto.precio === precio)
+  let productoPrecioString= productosPorPrecio.map(producto => "ID: " + producto.id + "MODELO: " + producto.modelo + "PRECIO: " + producto.precio).join("\n")
+  alert (productoPrecioString)
+  }else if (opcion === 4){
+  let stock= prompt("cantidad de productos disponibles")
+  let productoStock= productos.filter(producto => producto.stock == stock)
+  let productoEnStock= productoEnStock.map (producto => "ID: " + producto.id + "MODELO: " + producto.modelo + "DISPONIBLES: " + producto.stock).join("\n")
+  alert (productoEnStock)
+  }else if (opcion === 5){
+  let agregarProductos = "seleccione el n° del item para agregar al carrito: \n0:para salir"+
+  productos.map(producto => producto.id + " MODELO: " + producto.modelo + "CATEGORIA " + producto.categoria + "PRECIO " + producto.precio).join('\n')
+  let idProducto
+  do{
+    idProducto = Number(prompt(agregarProductos))
+    let idProductoIngresado = productos.find(producto => producto.id === idProducto)
+    if (idProductoIngresado){
+      let ubicacionProducto = carrito.findIndex(producto => producto.id === idProductoIngresado.id)
+      if (ubicacionProducto != -1){
+        carrito[ubicacionProducto].cantidadUnidades++
+        carrito[ubicacionProducto].subtotal = carrito[ubicacionProducto].valorUnidad * carrito[ubicacionProducto].cantidadUnidades
+        alert ("Producto agregado al carrito de compras")
+      }else{
+        carrito.push({
+          id: idProductoIngresado.id,
+          modelo: idProductoIngresado.modelo,
+          categoria: idProductoIngresado.categoria,                       
+          cantidadUnidades: 1,
+          valorUnidad: idProductoIngresado.precio,
+          subtotal: idProducto.precio
+        })
+        alert("Su producto fue agregado al carrito")
+      }
     }
-  }
-  console.log(carrito)
-} while (opcion != 0)
-
-
+  } while (idProducto !=0)
+} while (opcion != 0) 
 
 
 // envio()
@@ -83,7 +108,3 @@ function metodoDePago() {
 envio ()
 
 metodoDePago ()
-
-
-
-
